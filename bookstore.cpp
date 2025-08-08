@@ -4,8 +4,14 @@
 #include <vector>
 #include <algorithm>
 #include "util.cpp"
-#include "book.hpp"
 using namespace std;
+
+
+struct Book {
+    string title;
+    string author;
+    int created_in;
+};
 
 
 struct Library {
