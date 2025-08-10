@@ -3,16 +3,15 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "util.cpp"
 #include "book_n_library.hpp"
+#include "book_serielization.hpp"
+//#include "util.cpp"
 using namespace std;
-
-
 
 
 int main() {
     Library main_db;
-    main_db.restoreData("mylibrary.lbl");
+    main_db.inventory = restoreData("mylibrary.lbl");
 
     while (true) {
         cout << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
@@ -31,7 +30,7 @@ int main() {
             );
 
         } else if (choose == "Sair") {
-            main_db.saveBooks("mylibrary.lbl");
+            saveBooks(main_db.inventory, "mylibrary.lbl");
             break;
         }
 

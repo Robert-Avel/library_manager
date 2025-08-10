@@ -1,0 +1,70 @@
+#include "book_n_library.hpp"
+#include <vector>
+#include <string>
+#include <fstream>
+using namespace std;
+
+
+void saveBooks(vector<Book> &inventory, string file_name) {
+    int quantity = inventory.size(); // núnero de elementos
+
+    ofstream fout;
+    fout.open(file_name, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+    if (fout.is_open()) {
+        //Cabeçalho
+        //int == número de elemento
+        fout.write((char*) &quantity, sizeof(int));
+
+
+        //Conteúdo
+        for (int c = 0; c < quantity; c++) {
+            int title_len = inventory[c].title.size();
+            //Fazer dps um teste com strings maiores que 255 caracteres
+            fout.write((char*) &title_len, sizeof(int));
+            fout.write((char*) inventory[c].title.c_str(), title_len);
+
+            int author_len = inventory[c].author.size();
+            fout.write((char*) &author_len, sizeof(int));
+            fout.write((char*) inventory[c].author.c_str(), author_len);
+
+            fout.write((char*) &inventory[c].created_in, sizeof(int));
+        }
+        fout.close();
+        std::cout << "Informação salva com sucesso!!\n";
+
+    } else {
+        std::cout << "Algo deu errado ao tentar abrir o arquivo\n";
+    }  
+}
+vector<Book> restoreData(string file_name) {
+
+    vector<Book> loaded_inventory = {};
+
+    ifstream fin;
+    fin.open(file_name, std::ios_base::in | std::ios_base::binary );
+    if (fin.is_open()) {
+        int quantity;
+        fin.read((char*) &quantity, sizeof(int));
+
+        for (int c = 0; c < quantity; c++) {
+            int title_len;
+            fin.read((char*) &title_len, sizeof(int));
+            string title(title_len, '\0');
+            fin.read((char*) &title[0], title_len);
+
+            int author_len;
+            fin.read((char*) &author_len, sizeof(int));
+            string author(author_len, '\0');
+            fin.read((char*) &author[0], author_len);
+
+            int created;
+            fin.read((char*) &created, sizeof(int));
+
+            Book loaded_book = {title, author, created};
+            loaded_inventory.push_back(loaded_book);
+            
+            cout << "Título: " << loaded_book.title << "\nAuthor: " << loaded_book.author << "\nAno de lançamento: " << loaded_book.created_in << endl;
+        }
+        return loaded_inventory;
+    }
+}
