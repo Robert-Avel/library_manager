@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void listPrint(std::vector<std::string> options) {
+void listPrint(vector<string> options) {
     for (int i = 0; i < options.size(); i++) {
         std::cout << "[ " << i << " ] - " << options[i] << std::endl;
     }
@@ -23,7 +23,7 @@ int inputInt(string input_text) {
     return user_input;
 }
 
-int inputRange(std::vector<std::string> options) {
+int inputRange(vector<string> options) {
     //Função de validação de input, aceitando valores que estão dentro do range do array dado. retorna o index
     int user_in;
     listPrint(options);
@@ -34,7 +34,7 @@ int inputRange(std::vector<std::string> options) {
     return user_in;
 }
 
-std::string inputOption(std::vector<std::string> options) {
+string inputOption(std::vector<std::string> options) {
     int user_in;
     listPrint(options);
     do {
