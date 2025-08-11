@@ -14,7 +14,7 @@ int main() {
     main_db.inventory = restoreData("mylibrary.lbl");
 
     while (true) {
-        cout << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
+        cout << endl << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
 
         string choose = inputOption({"Livros Registrados","Registrar", "Alterar Registro", "Apagar Registro", "Sair"});
         if (choose == "Livros Registrados") {
