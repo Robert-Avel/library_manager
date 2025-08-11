@@ -77,5 +77,8 @@ vector<Book> restoreData(string file_name) {
             cout << "Título: " << loaded_book.title << "\nAuthor: " << loaded_book.author << "\nAno de lançamento: " << loaded_book.created_in << endl;
         }
         return loaded_inventory;
+    } else {
+        cout << "Algo deu errado ao tentar abrir o arquivo\n";
     }
+    return loaded_inventory;
 }

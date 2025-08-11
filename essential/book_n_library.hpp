@@ -77,19 +77,23 @@ struct Library {
             if (b.author.size() > max_author_size) {max_author_size = b.author.size();}
             if (b.genre.size() > max_genre_size) {max_genre_size = b.genre.size();}
         }
-        for (Book& b: inventory) {
-            cout << b.title;
-            for (int c = 0; c < max_title_size-b.title.size(); c++) {cout << " ";}
+        for (int i = 0; i < inventory.size(); i++) { 
+
+            cout << i;
+            for (int c = 0; c < 3 - to_string(i).size(); c++) {cout << " ";}
+
+            cout << " | " << inventory[i].title;
+            for (int c = 0; c < max_title_size - inventory[i].title.size(); c++) {cout << " ";}
             
-            cout << " | " << b.author;
-            for (int c = 0; c < max_author_size-b.author.size(); c++) {cout << " ";}
+            cout << " | " << inventory[i].author;
+            for (int c = 0; c < max_author_size - inventory[i].author.size(); c++) {cout << " ";}
             
-            cout << " | " << b.genre;
-            for (int c = 0; c < max_genre_size-b.genre.size(); c++) {cout << " ";}
+            cout << " | " << inventory[i].genre;
+            for (int c = 0; c < max_genre_size - inventory[i].genre.size(); c++) {cout << " ";}
             
-            cout << " | " << b.created_in;
-            for (int c = 0; c < book_age_size - to_string(b.created_in).size(); c++) {cout << " ";}
-            cout << " | " << endl;
+            cout << " | " << inventory[i].created_in;
+            for (int c = 0; c < book_age_size - to_string(inventory[i].created_in).size(); c++) {cout << " ";}
+            cout << " |" << endl;
         }
     }
     void printBook(Book selected_book) {
