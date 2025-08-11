@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "book_n_library.hpp"
-#include "book_serielization.hpp"
+//#include "book_n_library.hpp"
+#include "essential/book_serielization.hpp"
 //#include "util.cpp"
 using namespace std;
 
@@ -26,6 +26,7 @@ int main() {
             main_db.createBook(
                 inputStr("Título do Livro: "),
                 inputStr("Author do Livro: "),
+                None,
                 inputInt("Ano de lançamento: ")
             );
 
