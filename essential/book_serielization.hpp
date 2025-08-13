@@ -5,6 +5,8 @@
 using namespace std;
 
 
+static Librarian temp_librarian;
+
 void saveBooks(vector<Book> &inventory, string file_name) {
     int quantity = inventory.size(); // núnero de elementos
 
@@ -27,9 +29,9 @@ void saveBooks(vector<Book> &inventory, string file_name) {
             fout.write((char*) &author_len, sizeof(int));
             fout.write((char*) inventory[c].author.c_str(), author_len);
 
-            int genre_len = inventory[c].genre.size();
-            fout.write((char*) &genre_len, sizeof(int));
-            fout.write((char*) inventory[c].genre.c_str(), genre_len);
+            int genre = temp_librarian.genreToString(inventory[c].genre);
+            fout.write((char*) &genre, sizeof(int));
+            //fout.write((char*) inventory[c].genre.c_str(), genre_len);
 
             fout.write((char*) &inventory[c].created_in, sizeof(int));
         }
@@ -62,16 +64,16 @@ vector<Book> restoreData(string file_name) {
             string author(author_len, '\0');
             fin.read((char*) &author[0], author_len);
 
-            int genre_len;
-            fin.read((char*) &genre_len, sizeof(int));
-            string genre(genre_len, '\n');
-            fin.read((char*) &genre[0], genre_len);
+            BookGenre genre;
+            fin.read((char*) &genre, sizeof(int));
+            //string genre(genre_len, '\n');
+            //fin.read((char*) &genre[0], genre_len);
 
 
             int created;
             fin.read((char*) &created, sizeof(int));
 
-            Book loaded_book = {title, author, genre, created};
+            Book loaded_book = {title, author, temp_librarian.genreToString(genre), created};
             loaded_inventory.push_back(loaded_book);
             
             cout << "Título: " << loaded_book.title << "\nAuthor: " << loaded_book.author << "\nAno de lançamento: " << loaded_book.created_in << endl;

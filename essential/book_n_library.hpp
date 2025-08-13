@@ -38,31 +38,9 @@ struct Library {
         } else {return false;}
     }
 
-    void createBook(string titleI, string authorI,BookGenre genre_id, int ageI) {
+    void createBook(string titleI, string authorI,int ageI, BookGenre genre_id = None) {
         string genreI = "N/A";
-        switch(genre_id)
-        {
-        case Romance:
-            genreI = "Romance";
-            break;
-        case Mystery:
-            genreI = "Mystery";
-            break;
-        case Ficction:
-            genreI = "Ficction";
-            break;
-        case Historical:
-            genreI = "Historical";
-            break;
-        case Poem:
-            genreI = "Poem";
-            break;
-        case Science:
-            genreI = "Science";
-            break;
-        default:
-            break;
-        }
+
         inventory.push_back(Book{titleI, authorI, genreI, ageI});
     }
     
@@ -119,6 +97,8 @@ struct Library {
                 inventory[index].author = inputStr("Novo Author do Livro: ");
             } else if (edit_opc == "Editar Ano de lançamento") {
                 inventory[index].created_in = inputInt("Novo Ano de Lançamento: ");
+            } else if (edit_opc == "Editar Gênero") {
+                //Fazer depois
             }
     };
     void deleteBook(int index) {
@@ -126,3 +106,41 @@ struct Library {
     }
 };
 
+
+
+struct Librarian
+{
+    Book createBook(string title, string author, int created_in, BookGenre Genre) {
+        Book new_book = {title, author, genreToString(Genre),created_in};
+        return new_book;
+    }
+
+    string genreToString(BookGenre genre) {
+        switch(genre)
+        {
+        case Romance:
+            return "Romance";
+        case Mystery:
+            return "Mystery";
+        case Ficction:
+            return "Ficction";
+        case Historical:
+            return "Historical";
+        case Poem:
+            return "Poem";
+        case Science:
+            return "Science";
+        default:
+            return "N/A";
+        }
+    }
+    BookGenre genreToString(string &genre) {
+        if (genre == "Romance") {return Romance;}
+        else if (genre == "Mystery") {return Mystery;}
+        else if (genre == "Ficction") {return Ficction;}
+        else if (genre == "Historical") {return Historical;}
+        else if (genre == "Poem") {return Poem;}
+        else if (genre == "Science") {return Science;}
+        else {return None;}
+    }
+};

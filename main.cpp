@@ -26,7 +26,6 @@ int main() {
             main_db.createBook(
                 inputStr("Título do Livro: "),
                 inputStr("Author do Livro: "),
-                None,
                 inputInt("Ano de lançamento: ")
             );
 
