@@ -7,7 +7,7 @@ using namespace std;
 
 static Librarian temp_librarian;
 
-void saveBooks(vector<Book> &inventory, string file_name) {
+void saveBooks(vector<VirtualBook> &inventory, string file_name) {
     int quantity = inventory.size(); // núnero de elementos
 
     ofstream fout;
@@ -43,9 +43,9 @@ void saveBooks(vector<Book> &inventory, string file_name) {
     }  
 }
 
-vector<Book> restoreData(string file_name) {
+vector<VirtualBook> restoreData(string file_name) {
 
-    vector<Book> loaded_inventory = {};
+    vector<VirtualBook> loaded_inventory = {};
 
     ifstream fin;
     fin.open(file_name, std::ios_base::in | std::ios_base::binary );
@@ -73,7 +73,7 @@ vector<Book> restoreData(string file_name) {
             int created;
             fin.read((char*) &created, sizeof(int));
 
-            Book loaded_book = {title, author, temp_librarian.genreToString(genre), created};
+            VirtualBook loaded_book = {title, author, temp_librarian.genreToString(genre), created};
             loaded_inventory.push_back(loaded_book);
             
             cout << "Título: " << loaded_book.title << "\nAuthor: " << loaded_book.author << "\nAno de lançamento: " << loaded_book.created_in << endl;

@@ -18,7 +18,7 @@ enum BookGenre {
 };
 
 
-struct Book {
+struct VirtualBook {
     string title;
     string author;
     string genre;
@@ -29,7 +29,7 @@ struct Book {
 // Library class to manage a collection of books
 
 struct Library {
-    vector<Book> inventory = {};
+    vector<VirtualBook> inventory = {};
 
     bool isEmpty() {
         if (inventory.empty()) {
@@ -41,16 +41,19 @@ struct Library {
     void createBook(string titleI, string authorI,int ageI, BookGenre genre_id = None) {
         string genreI = "N/A";
 
-        inventory.push_back(Book{titleI, authorI, genreI, ageI});
+        inventory.push_back(VirtualBook{titleI, authorI, genreI, ageI});
     }
     
     void showBooks() {
+        if (isEmpty()) {
+            cout << "--- O Registro está vazio ---\n";
+        }
         int max_title_size = 0;
         int max_author_size = 0;
         int max_genre_size = 0;
         const int book_age_size = 5;
 
-        for (Book& b: inventory) {
+        for (VirtualBook& b: inventory) {
             if (b.title.size() > max_title_size) {max_title_size = b.title.size();}
             if (b.author.size() > max_author_size) {max_author_size = b.author.size();}
             if (b.genre.size() > max_genre_size) {max_genre_size = b.genre.size();}
@@ -74,7 +77,7 @@ struct Library {
             cout << " |" << endl;
         }
     }
-    void printBook(Book selected_book) {
+    void printBook(VirtualBook selected_book) {
         cout << "Título: " << selected_book.title << "\nAuthor: " << selected_book.author << "\nAno de lançamento: " << selected_book.created_in << endl;
     }
     int searchBook() {
@@ -110,8 +113,8 @@ struct Library {
 
 struct Librarian
 {
-    Book createBook(string title, string author, int created_in, BookGenre Genre) {
-        Book new_book = {title, author, genreToString(Genre),created_in};
+    VirtualBook createBook(string title, string author, int created_in, BookGenre Genre) {
+        VirtualBook new_book = {title, author, genreToString(Genre),created_in};
         return new_book;
     }
 

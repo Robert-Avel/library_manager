@@ -18,7 +18,6 @@ int main() {
 
         string choose = inputOption({"Livros Registrados","Registrar", "Alterar Registro", "Apagar Registro", "Sair"});
         if (choose == "Livros Registrados") {
-            if (main_db.isEmpty()) {continue;}
             main_db.showBooks();
         }
 
