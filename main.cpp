@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
     Library main_db;
-    main_db.inventory = restoreData("mylibrary.lbl");
+    main_db.inventory = restoreData("mylibrary2.lbl");
 
     while (true) {
         cout << endl << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
@@ -29,21 +29,21 @@ int main() {
             );
 
         } else if (choose == "Sair") {
-            saveBooks(main_db.inventory, "mylibrary.lbl");
+            saveBooks(main_db.inventory, "mylibrary2.lbl");
             break;
         }
 
         else if (choose == "Alterar Registro") {
             if (main_db.isEmpty()) {continue;}
 
-            int book_address = main_db.searchBook();
+            int book_address = main_db.getBook();
             main_db.editBook(book_address);
         }
 
         else if (choose == "Apagar Registro") {
             if (main_db.isEmpty()) {continue;}
 
-            int book_address = main_db.searchBook();
+            int book_address = main_db.getBook();
             main_db.deleteBook(book_address);
         }
     }
