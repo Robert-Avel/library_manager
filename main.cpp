@@ -27,7 +27,7 @@ int main() {
                 inputStr("Título do Livro: "),
                 inputStr("Author do Livro: "),
                 inputInt("Ano de lançamento: "),
-                (BookGenre)inputRange({"Romance", 'Mystery', "Ficction", "Historical", "Poem", "Science", "None"})
+                (BookGenre)inputRange({"Romance", "Mystery", "Ficction", "Historical", "Poem", "Science", "None"})
             );
 
 
@@ -39,13 +39,13 @@ int main() {
         else if (choose == "Alterar Registro") {
             if (main_db.isEmpty()) {continue;}
 
-            main_db.editBook(main_db.selectBook());
+            main_db.editBook(main_db.searchID());
         }
 
         else if (choose == "Apagar Registro") {
             if (main_db.isEmpty()) {continue;}
 
-            main_db.deleteBook(main_db.selectBook());
+            main_db.deleteBook(main_db.searchID());
         }
     }
     return 0;
