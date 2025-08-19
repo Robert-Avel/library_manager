@@ -22,11 +22,14 @@ int main() {
         }
 
         else if (choose == "Registrar") {
+            cout << "=== Criar Novo Livro ===";
             main_db.createBook(
                 inputStr("Título do Livro: "),
                 inputStr("Author do Livro: "),
-                inputInt("Ano de lançamento: ")
+                inputInt("Ano de lançamento: "),
+                (BookGenre)inputRange({"Romance", 'Mystery', "Ficction", "Historical", "Poem", "Science", "None"})
             );
+
 
         } else if (choose == "Sair") {
             saveBooks(main_db.inventory, "mylibrary2.lbl");
@@ -36,15 +39,13 @@ int main() {
         else if (choose == "Alterar Registro") {
             if (main_db.isEmpty()) {continue;}
 
-            int book_address = main_db.getBook();
-            main_db.editBook(book_address);
+            main_db.editBook(main_db.selectBook());
         }
 
         else if (choose == "Apagar Registro") {
             if (main_db.isEmpty()) {continue;}
 
-            int book_address = main_db.getBook();
-            main_db.deleteBook(book_address);
+            main_db.deleteBook(main_db.selectBook());
         }
     }
     return 0;
