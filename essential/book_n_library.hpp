@@ -17,22 +17,45 @@ enum BookGenre {
     None
 };
 
-struct MetaBook
-{
-    string title;
-    string author;
-    string genre;
-    int created_in;
-};
-
 
 struct VirtualBook {
+    VirtualBook(string titleI, string authorI,int ageI, BookGenre genre_id = None, int quantityI = 0) {
+        title = titleI;
+        author = authorI;
+        created_in = ageI;
+        _base_genre = genre_id;
+        genre = genreToString(genre_id);
+        quantity = quantityI;
+    }
+    string genreToString(BookGenre genre) {
+        switch(genre)
+        {
+        case Romance:
+            return "Romance";
+        case Mystery:
+            return "Mystery";
+        case Ficction:
+            return "Ficction";
+        case Historical:
+            return "Historical";
+        case Poem:
+            return "Poem";
+        case Science:
+            return "Science";
+        default:
+            return "N/A";
+        }
+    }
+
+    //Dados Base
+    BookGenre _base_genre;
+
+    //Dados Publicos
     string title;
     string author;
     string genre;
     int created_in;
-    unsigned int id;
-    unsigned int quantity = 0;
+    int quantity = 0;
 };
 
 
@@ -41,25 +64,6 @@ struct VirtualBook {
 struct Library {
     vector<VirtualBook> inventory = {};
 
-    VirtualBook *selector;
-
-    //STATUS
-    unsigned int max_title_size = 0;
-    unsigned int max_author_size = 0;
-    unsigned int max_genre_size = 0;
-    unsigned int book_age_size = 0;
-    unsigned int last_id = 0;
-
-    void updateStatus() {
-        for (VirtualBook b: inventory) {
-            if (b.id > last_id) {last_id = b.id;}
-            if (b.title.size() > max_title_size) {max_title_size = b.title.size();}
-            if (b.author.size() > max_author_size) {max_author_size = b.author.size();}
-            if (b.genre.size() > max_genre_size) {max_genre_size = b.genre.size();}
-            if (to_string(b.created_in).size() > book_age_size) {book_age_size = to_string(b.created_in).size();}
-        }
-    }
-
     bool isEmpty() {
         if (inventory.empty()) {
             return true;
@@ -67,12 +71,24 @@ struct Library {
         } else {return false;}
     }
 
+    void createBook(string titleI, string authorI,int ageI, BookGenre genre_id) {
+        inventory.push_back(VirtualBook(titleI, authorI, ageI, genre_id));
+    }
     
     void showBooks() {
         if (isEmpty()) {
             cout << "--- O Registro está vazio ---\n";
         }
+        int max_title_size = 0;
+        int max_author_size = 0;
+        int max_genre_size = 0;
+        const int book_age_size = 5;
 
+        for (VirtualBook& b: inventory) {
+            if (b.title.size() > max_title_size) {max_title_size = b.title.size();}
+            if (b.author.size() > max_author_size) {max_author_size = b.author.size();}
+            if (b.genre.size() > max_genre_size) {max_genre_size = b.genre.size();}
+        }
         for (int i = 0; i < inventory.size(); i++) { 
 
             cout << i;
@@ -89,56 +105,45 @@ struct Library {
             
             cout << " | " << inventory[i].created_in;
             for (int c = 0; c < book_age_size - to_string(inventory[i].created_in).size(); c++) {cout << " ";}
+
+            cout << " | " << inventory[i].quantity;
+            for (int c = 0; c < 3 - to_string(inventory[i].quantity).size(); c++) {cout << " ";}
+
             cout << " |" << endl;
         }
     }
     void printBook(VirtualBook selected_book) {
         cout << "Título: " << selected_book.title << "\nAuthor: " << selected_book.author << "\nAno de lançamento: " << selected_book.created_in << endl;
     }
-    void getBook() {
+    int selectBook() {
         while (true) 
         {
-            unsigned int search_seq = inputInt("Buscar um Livro por ID: ");
-            for (VirtualBook b: inventory) {
-                if (b.id == search_seq) {
-                    selector = &b;
-                }
+            int search_seq = inputInt("Buscar um Livro por ID: ");
+            if (0 <= search_seq < inventory.size()) {
+                return search_seq;
             }
-            cout << "Livro não encontrado!" << "\n";
+            cout << "Livro não encontrado ou o Valor se encontra fora do Alcance" << "\n";
         }
     }
-    void editBook() {
-        string edit_opc = inputOption({"Editar Título", "Editar Autor", "Editar Ano de lançamento"});
+    void editBook(int index) {
+        string edit_opc = inputOption({"Editar Título", "Editar Autor", "Editar Ano de lançamento", "Editar Gênero"});
+
             if (edit_opc == "Editar Título") {
-                selector->title = inputStr("Novo Título do Livro: ");
+                inventory[index].title = inputStr("Novo Título do Livro: ");
+        
             } else if (edit_opc == "Editar Autor") {
-                selector->author = inputStr("Novo Author do Livro: ");
+                inventory[index].author = inputStr("Novo Author do Livro: ");
+        
             } else if (edit_opc == "Editar Ano de lançamento") {
-                selector->created_in = inputInt("Novo Ano de Lançamento: ");
+                inventory[index].created_in = inputInt("Novo Ano de Lançamento: ");
+        
             } else if (edit_opc == "Editar Gênero") {
-                //Fazer depois
+                inventory[index]._base_genre = (BookGenre) inputRange({"Romance", 'Mystery', "Ficction", "Historical", "Poem", "Science", "None"});
             }
-    }
-
-    void addBook(MetaBook &new_book) {
-        inventory.push_back({new_book.title, new_book.author, new_book.genre, new_book.created_in, last_id+1, 0});
-        updateStatus();
-    }
-
-
-    void deleteBook() {
-        inventory.erase(find(inventory.begin(), inventory.end(), *selector));
-        updateStatus();
+    };
+    void deleteBook(int index) {
+        inventory.erase(inventory.begin() + index);
     }
 };
 
 
-
-struct Librarian
-{
-    MetaBook createBook(string title, string author, int created_in, string genre = "N/A") {
-        MetaBook new_book = {title, author, genre, created_in};
-        return new_book;
-    }
-
-};
