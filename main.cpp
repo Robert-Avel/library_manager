@@ -3,20 +3,18 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-//#include "book_n_library.hpp"
 #include "essential/book_serielization.hpp"
-//#include "util.cpp"
 using namespace std;
 
 
 int main() {
     Library main_db;
-    main_db.inventory = restoreData("mylibrary2.lbl");
+    main_db.inventory = Book::restoreData("mylibrary2.lbl");
 
     while (true) {
         cout << endl << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
 
-        string choose = inputOption({"Livros Registrados","Registrar", "Alterar Registro", "Apagar Registro", "Sair"});
+        string choose = inputOption({"Livros Registrados","Registrar", "Alterar Registro", "Apagar Registro", "Adicionar Livro", "Remover Livro","Sair"});
         if (choose == "Livros Registrados") {
             main_db.showBooks();
         }
@@ -32,20 +30,24 @@ int main() {
 
 
         } else if (choose == "Sair") {
-            saveBooks(main_db.inventory, "mylibrary2.lbl");
+            Book::saveBooks(main_db.inventory, "mylibrary2.lbl");
             break;
         }
 
         else if (choose == "Alterar Registro") {
-            if (main_db.isEmpty()) {continue;}
-
             main_db.editBook(main_db.searchID());
         }
 
         else if (choose == "Apagar Registro") {
-            if (main_db.isEmpty()) {continue;}
-
             main_db.deleteBook(main_db.searchID());
+        }
+
+        else if(choose == "Adicionar Livro") {
+            main_db.addBook(main_db.searchID());
+        }
+
+        else if (choose == "Remover Livro") {
+            main_db.removeBook(main_db.searchID());
         }
     }
     return 0;

@@ -69,17 +69,21 @@ struct VirtualBook {
 struct Library {
     protected:
 
+    int total_books = 0;
+
     int max_title_size = 0;
     int max_author_size = 0;
     int max_genre_size = 0;
     int book_age_size = 5;
 
     void updateStatus() {
-    for (VirtualBook& b: inventory) {
-        if (b.title.size() > max_title_size) {max_title_size = b.title.size();}
-        if (b.author.size() > max_author_size) {max_author_size = b.author.size();}
-        if (b.getGenre().size() > max_genre_size) {max_genre_size = b.getGenre().size();}
-        if (to_string(b.created_in).size() > book_age_size) {book_age_size = to_string(b.created_in).size();}
+        total_books = 0;
+        for (VirtualBook& b: inventory) {
+            if (b.title.size() > max_title_size) {max_title_size = b.title.size();}
+            if (b.author.size() > max_author_size) {max_author_size = b.author.size();}
+            if (b.getGenre().size() > max_genre_size) {max_genre_size = b.getGenre().size();}
+            if (to_string(b.created_in).size() > book_age_size) {book_age_size = to_string(b.created_in).size();}
+            total_books += b.quantity;
         }
     }
     public:
@@ -104,7 +108,6 @@ struct Library {
         }
 
         updateStatus();
-
         for (int i = 0; i < inventory.size(); i++) { 
 
             cout << i;
@@ -132,6 +135,7 @@ struct Library {
         cout << "Título: " << selected_book.title << "\nAuthor: " << selected_book.author << "\nAno de lançamento: " << selected_book.created_in << endl;
     }
     int searchID() {
+        if (isEmpty()) {return;}
         while (true) 
         {
             int search_seq = inputInt("Buscar um Livro por ID: ");
@@ -142,6 +146,7 @@ struct Library {
         }
     }
     void editBook(int index) {
+        if (isEmpty()) {return;}
         string edit_opc = inputOption({"Editar Título", "Editar Autor", "Editar Ano de lançamento", "Editar Gênero"});
 
             if (edit_opc == "Editar Título") {
@@ -159,16 +164,19 @@ struct Library {
         updateStatus();
     };
     void deleteBook(int index) {
+        if (isEmpty()) {return;}
         inventory.erase(inventory.begin() + index);
         updateStatus();
     }
 
     void addBook(int index, int value = 1) {
+        if (isEmpty()) {return;}
         inventory[index].quantity += value;
         cout << "Adicionado " << value << " unidade(s) do livro " << inventory[index].title << "\n";
         cout << "Undidades Atual: " << inventory[index].quantity << "\n";
     }
     void removeBook(int index, int value = 1) {
+        if (isEmpty()) {return;}
         if (inventory[index].quantity - value >= 0) {
             inventory[index].quantity -= value;
             cout << "Removido " << value << " unidade(s) do livro " << inventory[index].title << "\n";

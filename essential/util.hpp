@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void listPrint(vector<string> options) {
+void listPrint(vector<string> &options) {
     for (int i = 0; i < options.size(); i++) {
         std::cout << "[ " << i << " ] - " << options[i] << std::endl;
     }
