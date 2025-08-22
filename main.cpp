@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "essential/serielization.hpp"
+#include "src/serielization.hpp"
 using namespace std;
 
 
@@ -35,19 +35,26 @@ int main() {
         }
 
         else if (choose == "Alterar Registro") {
-            main_db.editBook(main_db.searchID());
+            if (main_db.isEmpty()) {break;}
+            main_db.searchID();
+            main_db.editBook();
         }
 
         else if (choose == "Apagar Registro") {
+            if (main_db.isEmpty()) {break;}
             main_db.deleteBook(main_db.searchID());
         }
 
         else if(choose == "Adicionar Livro") {
-            main_db.addBook(main_db.searchID());
+            if (main_db.isEmpty()) {break;}
+            main_db.searchID();
+            main_db.addBook();
         }
 
         else if (choose == "Remover Livro") {
-            main_db.removeBook(main_db.searchID());
+            if (main_db.isEmpty()) {break;}
+            main_db.searchID();
+            main_db.removeBook();
         }
     }
     return 0;

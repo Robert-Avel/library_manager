@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <ctime>
 #include "util.hpp"
 using namespace std;
 
@@ -19,14 +20,13 @@ enum BookGenre {
 
 
 struct VirtualBook {
-    VirtualBook(string titleI, string authorI,int ageI, BookGenre genre_id = None, int quantityI = 0) {
+    VirtualBook(string titleI, string authorI,int ageI, BookGenre genre_id = None, int quantityI = 0, int ID_ = time(NULL)) {
         title = titleI;
         author = authorI;
         created_in = ageI;
         _base_genre = genre_id;
-        //genre = genreToString(genre_id);
         quantity = quantityI;
-
+        ID = ID_;
     }
     string genreToString(BookGenre genre) {
         switch(genre)
@@ -58,8 +58,8 @@ struct VirtualBook {
     //Dados Publicos
     string title;
     string author;
-    //string genre;
     int created_in;
+    int ID;
     int quantity = 0;
 };
 
@@ -75,6 +75,8 @@ struct Library {
     int max_author_size = 0;
     int max_genre_size = 0;
     int book_age_size = 5;
+
+    VirtualBook* selected_book;
 
     void updateStatus() {
         total_books = 0;
@@ -128,6 +130,7 @@ struct Library {
             cout << " | " << inventory[i].quantity;
             for (int c = 0; c < 3 - to_string(inventory[i].quantity).size(); c++) {cout << " ";}
 
+            cout << " | " << inventory[i].ID;
             cout << " |" << endl;
         }
     }
@@ -135,31 +138,34 @@ struct Library {
         cout << "Título: " << selected_book.title << "\nAuthor: " << selected_book.author << "\nAno de lançamento: " << selected_book.created_in << endl;
     }
     int searchID() {
-        if (isEmpty()) {return;}
         while (true) 
         {
-            int search_seq = inputInt("Buscar um Livro por ID: ");
-            if (0 <= search_seq | search_seq < inventory.size()) {
-                return search_seq;
+            int search_id = inputInt("Buscar um Livro por ID: ");
+            for (int i = 0; i < inventory.size(); i++) {
+                if (inventory[i].ID == search_id) {
+                    selected_book = &inventory[i];
+                    return i;
+                }
             }
             cout << "Livro não encontrado ou o Valor se encontra fora do Alcance" << "\n";
         }
     }
-    void editBook(int index) {
+
+    void editBook() {
         if (isEmpty()) {return;}
         string edit_opc = inputOption({"Editar Título", "Editar Autor", "Editar Ano de lançamento", "Editar Gênero"});
 
             if (edit_opc == "Editar Título") {
-                inventory[index].title = inputStr("Novo Título do Livro: ");
+                selected_book->title = inputStr("Novo Título do Livro: ");
         
             } else if (edit_opc == "Editar Autor") {
-                inventory[index].author = inputStr("Novo Author do Livro: ");
+                selected_book->author = inputStr("Novo Author do Livro: ");
         
             } else if (edit_opc == "Editar Ano de lançamento") {
-                inventory[index].created_in = inputInt("Novo Ano de Lançamento: ");
+                selected_book->created_in = inputInt("Novo Ano de Lançamento: ");
         
             } else if (edit_opc == "Editar Gênero") {
-                inventory[index]._base_genre = (BookGenre) inputRange({"Romance", "Mystery", "Ficction", "Historical", "Poem", "Science", "None"});
+                selected_book->_base_genre = (BookGenre) inputRange({"Romance", "Mystery", "Ficction", "Historical", "Poem", "Science", "None"});
             }
         updateStatus();
     };
@@ -169,18 +175,18 @@ struct Library {
         updateStatus();
     }
 
-    void addBook(int index, int value = 1) {
+    void addBook(int value = 1) {
         if (isEmpty()) {return;}
-        inventory[index].quantity += value;
-        cout << "Adicionado " << value << " unidade(s) do livro " << inventory[index].title << "\n";
-        cout << "Undidades Atual: " << inventory[index].quantity << "\n";
+        selected_book->quantity += value;
+        cout << "Adicionado " << value << " unidade(s) do livro " << selected_book->title << "\n";
+        cout << "Undidades Atual: " << selected_book->quantity << "\n";
     }
-    void removeBook(int index, int value = 1) {
+    void removeBook(int value = 1) {
         if (isEmpty()) {return;}
-        if (inventory[index].quantity - value >= 0) {
-            inventory[index].quantity -= value;
-            cout << "Removido " << value << " unidade(s) do livro " << inventory[index].title << "\n";
-            cout << "Undidades Atual: " << inventory[index].quantity << "\n";
+        if (selected_book->quantity - value >= 0) {
+            selected_book->quantity -= value;
+            cout << "Removido " << value << " unidade(s) do livro " << selected_book->title << "\n";
+            cout << "Undidades Atual: " << selected_book->quantity << "\n";
         } else {cout << "O Valor é maior que a quantidade disponível\n";}
     }
 };

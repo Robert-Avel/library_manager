@@ -33,6 +33,8 @@ namespace Book {
                 fout.write((char*) &inventory[c].created_in, sizeof(int));
 
                 fout.write((char*) &inventory[c].quantity, sizeof(unsigned int));
+
+                fout.write((char*) &inventory[c].ID, sizeof(int));
             }
             fout.close();
             std::cout << "Informação salva com sucesso!!\n";
@@ -76,7 +78,10 @@ namespace Book {
                 unsigned int quantity;
                 fin.read((char*) &quantity, sizeof(unsigned int));
 
-                VirtualBook loaded_book = VirtualBook(title, author, created, genre, quantity);
+                int ID_;
+                fin.read((char*) &ID_, sizeof(int));
+
+                VirtualBook loaded_book = VirtualBook(title, author, created, genre, quantity, ID_);
                 loaded_inventory.push_back(loaded_book);
                 
                 cout << "Título: " << loaded_book.title << "\nAuthor: " << loaded_book.author << "\nAno de lançamento: " << loaded_book.created_in << endl;

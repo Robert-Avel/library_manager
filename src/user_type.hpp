@@ -20,8 +20,8 @@ class User {
     string passwordInput(string input_text) {
         string password_;
         cout << input_text;
-        char ch;
-        //ch = getche(); ADICIONAR INPUT SECRETO
+        cin >> password_; //PLACEHOLDER
+        return password;
     }
 };
 
