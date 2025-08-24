@@ -1,52 +1,38 @@
 #include <string>
 #include <iostream>
+#include <ctime>
 using namespace std;
 
-class User {
+class Client {
     protected:
-    string username;
-    string password;
-    Role user_role;
+    string name;
+    time_t birth_date;
+    char gender;
 
     public:
-    User(string username_, string password_, Role role) {
-        username = username_;
-        password = password_;
-        user_role = role;
+    Client(string name_, char gender_, int birth_day, int birth_month, int birth_year) {
+        struct tm datetime = {};
+
+        datetime.tm_year = birth_year - 1900;
+        datetime.tm_mon = birth_month -1;
+        datetime.tm_mday = birth_day;
+
+        name = name_;
+        birth_date = mktime(&datetime);
+        gender = gender_;
     }
 
-    string getUserName() {return username;}
-    bool validadePassWord(string password_input) {return password_input == password;}
-    string passwordInput(string input_text) {
-        string password_;
-        cout << input_text;
-        cin >> password_; //PLACEHOLDER
-        return password;
+    string showBirthDate() {
+        struct tm bd = *localtime(&birth_date);
+        char output[50];
+
+        strftime(output, 50, "%d %B %Y", &bd);
+        return string(output);
     }
-};
 
-
-class Role {
-    protected:
-
-    bool canRead = false;
-    bool canCRUD = false;
-    bool admPermition = false;
-};
-
-
-class Reader: public Role {
-    public:
-    Reader(string username_, string password_) {
-        canRead = true;
-    }
-};
-
-
-class Librarian: public Role {
-    public:
-    Librarian(string username_, string password_) {
-        canRead = true;
-        canCRUD = true;
+    void showInfo() {
+        cout << "Nome: " << name << endl
+             << "Data de Nascimento: " << showBirthDate() << endl
+             << "Gênero: " << gender << endl;
     }
 };
