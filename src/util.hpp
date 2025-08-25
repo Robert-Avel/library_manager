@@ -70,3 +70,10 @@ string inputStr(string txt) {
     }
     //cin.ignore(1000, '\n');
 }
+
+
+char genderInput() {
+    int input = inputRange({"M - Male", "F - Female"});
+    if (input == 0) {return 'M';}
+    else {return 'F';}
+}
