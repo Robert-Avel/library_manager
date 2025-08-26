@@ -6,7 +6,7 @@ using namespace std;
 
 
 namespace Book {
-    void saveBooks(vector<VirtualBook> &inventory, string file_name) {
+    void saveData(vector<VirtualBook> &inventory, string file_name) {
         int quantity = inventory.size(); // núnero de elementos
 
         ofstream fout;
@@ -91,5 +91,68 @@ namespace Book {
             cout << "Algo deu errado ao tentar abrir o arquivo\n";
         }
         return loaded_inventory;
+    }
+}
+
+
+namespace Client {
+    void saveData(vector<VirtualClient> &data, string file_name) {
+        int quantity = data.size();
+
+        ofstream fout;
+
+        fout.open(file_name, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+        if (!fout.is_open()) {
+            cout << "Algo deu errado ao tentar abrir o arquivo!\n";
+        } else {
+            fout.write((char*)&quantity, sizeof(int));
+
+            for(int i = 0; i < quantity; i++) {
+                int name_size = data[i].name.size();
+                fout.write((char*) &name_size, sizeof(int));
+                fout.write((char*) data[i].name.c_str(), name_size);
+
+                fout.write((char*) &data[i].gender, sizeof(char));
+
+                fout.write((char*) &data[i].birth_date, sizeof(time_t));
+
+                fout.write((char*) &data[i].id, sizeof(int));
+            }
+            fout.close();
+            std::cout << "Informação salva com sucesso!!\n";
+        }
+    }
+
+
+    vector<VirtualClient> restoreData(string file_name) {
+        vector<VirtualClient> loaded_data = {};
+
+        ifstream fin;
+
+        fin.open(file_name);
+        if(!fin.is_open()) {
+            cout << "Algo deu errado ao tentar abrir o arquivo!\n";
+        } else {
+            int quantity;
+            fin.read((char*) &quantity, sizeof(int));
+            
+            for(int i = 0; i < quantity; i++) {
+                int name_size;
+                string name(name_size, '\0');
+                char gender;
+                time_t birthdate;
+                int id;
+
+                fin.read((char*) &name_size, sizeof(int));
+                fin.read((char*) &name[0], name_size);
+                fin.read((char*) &gender, sizeof(char));
+                fin.read((char*) &birthdate, sizeof(time_t));
+                fin.read((char*) &id, sizeof(int));
+
+                loaded_data.push_back(VirtualClient(name, gender, birthdate, id));
+            }
+            fin.close();
+        }
+        return loaded_data;
     }
 }

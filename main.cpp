@@ -12,6 +12,7 @@ int main() {
     ClientManager client_db;
 
     main_db.inventory = Book::restoreData("mylibrary2.lbl");
+    client_db.clients = Client::restoreData("client.lbl");
 
     while (true) {
         cout << endl << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
@@ -33,7 +34,8 @@ int main() {
 
 
         } else if (choose == "Sair") {
-            Book::saveBooks(main_db.inventory, "mylibrary2.lbl");
+            Book::saveData(main_db.inventory, "mylibrary2.lbl");
+            Client::saveData(client_db.clients, "client.lbl");
             break;
         }
 
