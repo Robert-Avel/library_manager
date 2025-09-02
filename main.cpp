@@ -7,18 +7,17 @@
 using namespace std;
 
 
-int main() {
-    Library main_db;
-    ClientManager client_db;
+static Library main_db;
+static ClientManager client_db;
 
-    main_db.inventory = Book::restoreData("mylibrary2.lbl");
-    client_db.clients = Client::restoreData("client.lbl");
 
-    while (true) {
-        cout << endl << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
+void library_area_loop() {
 
+    while (1) {
         string choose = inputOption({"Livros Registrados","Registrar", "Alterar Registro", "Apagar Registro", "Adicionar Livro", 
-        "Remover Livro", "Cadastrar Cliente", "Mostrar Clientes","Remover Cliente", "Sair"});
+            "Remover Livro", "Sair"});
+        
+
         if (choose == "Livros Registrados") {
             main_db.showBooks();
         }
@@ -35,7 +34,6 @@ int main() {
 
         } else if (choose == "Sair") {
             Book::saveData(main_db.inventory, "mylibrary2.lbl");
-            Client::saveData(client_db.clients, "client.lbl");
             break;
         }
 
@@ -61,23 +59,73 @@ int main() {
             main_db.searchID();
             main_db.removeBook();
         }
+    }
+}
 
+
+void client_area_loop() {
+    while (1)
+    {
+        string choose = inputOption({"Cadastrar Cliente", "Mostrar Clientes","Remover Cliente", "Editar Cliente", "Sair"});
+
+
+        if(choose == "Sair") {
+            Client::saveData(client_db.clients, "client.lbl");
+            break;
+        } 
+        
+        
         else if (choose == "Cadastrar Cliente") {
             client_db.createClient(
                 inputStr("Nome do Cliente: "),
-                genderInput(),
-                inputInt("Dia do Nascimento do Cliente: "),
-                inputInt("Mês de Nascimento do Cliente: "),
-                inputInt("Ano de Nascimento do Cliente: ")
+                inputGender(),
+                inputRange("Dia do Nascimento: ", 31, 1),
+                inputRange("Mês do Nascimento: ", 12, 1),
+                inputInt("Ano de nascimento: ")
             );
         }
+        
         else if(choose == "Mostrar Clientes") {
             client_db.showClients();
         }
+
         else if (choose == "Remover Cliente") {
             if (client_db.clients.empty()) {break;}
             client_db.deleteClient(client_db.searchID());
-        }   
+        }
+
+        else if (choose == "Editar Cliente") {
+            client_db.searchID();
+            string opc = inputOption({"Nome", "Gênero", "Data de Nascimento"});
+            if (opc == "Nome") {client_db.selected_clients->name = inputStr("Novo Nome:");}
+            if (opc == "Gênero") {client_db.selected_clients->gender = inputGender();}
+            if (opc == "Data de Nascimento") {tm datetime = client_db.inputBirthDate(); client_db.selected_clients->birth_date = mktime(&datetime);}
+        }
+    }
+}
+
+
+
+
+int main() {
+    main_db.inventory = Book::restoreData("mylibrary2.lbl");
+    client_db.clients = Client::restoreData("client.lbl");
+
+    while (true) { // PRINCIPAL
+        cout << endl << "---[ Bibliotecária Eletrônica ]---" << endl << endl;
+
+        string area_choose = inputOption({"Àrea de Livros", "Área de Clientes", "Aluguel de Livros", "Fechar"});
+
+
+        if (area_choose == "Fechar") {
+            break;
+        } else if(area_choose == "Àrea de Livros") {
+            library_area_loop();
+        } else if (area_choose == "Área de Clientes") {
+            client_area_loop();
+        } else if (area_choose == "Aluguel de Livros [EM BREVE]") {
+            cout << "EM CONSTRUÇÃO" << endl;
+        }
     }
     return 0;
 }

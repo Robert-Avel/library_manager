@@ -138,17 +138,20 @@ namespace Client {
             
             for(int i = 0; i < quantity; i++) {
                 int name_size;
-                string name(name_size, '\0');
-                char gender;
-                time_t birthdate;
-                int id;
-
                 fin.read((char*) &name_size, sizeof(int));
-                fin.read((char*) &name[0], name_size);
-                fin.read((char*) &gender, sizeof(char));
-                fin.read((char*) &birthdate, sizeof(time_t));
-                fin.read((char*) &id, sizeof(int));
 
+                string name(name_size, '\0');
+                fin.read((char*) &name[0], name_size);
+
+                char gender;
+                fin.read((char*) &gender, sizeof(char));
+
+                time_t birthdate;
+                fin.read((char*) &birthdate, sizeof(time_t));
+
+                int id;
+                fin.read((char*) &id, sizeof(int));
+                
                 loaded_data.push_back(VirtualClient(name, gender, birthdate, id));
             }
             fin.close();

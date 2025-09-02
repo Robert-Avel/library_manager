@@ -87,10 +87,12 @@ struct Library {
 
     int total_books = 0;
 
-    int max_title_size = 0;
-    int max_author_size = 0;
-    int max_genre_size = 0;
-    int book_age_size = 5;
+    int max_id_size = 2;
+    int max_quantity_size = 10;
+    int max_title_size = 6;
+    int max_author_size = 5;
+    int max_genre_size = 6;
+    int max_age_size = 3;
 
     VirtualBook* selected_book;
 
@@ -100,7 +102,9 @@ struct Library {
             if (b.title.size() > max_title_size) {max_title_size = b.title.size();}
             if (b.author.size() > max_author_size) {max_author_size = b.author.size();}
             if (b.getGenre().size() > max_genre_size) {max_genre_size = b.getGenre().size();}
-            if (to_string(b.created_in).size() > book_age_size) {book_age_size = to_string(b.created_in).size();}
+            if (to_string(b.created_in).size() > max_age_size) {max_age_size = to_string(b.created_in).size();}
+            if (to_string(b.ID).size() > max_id_size) {max_id_size = to_string(b.ID).size();}
+            if (to_string(b.quantity).size() > max_quantity_size) {max_quantity_size = to_string(b.quantity).size();}
             total_books += b.quantity;
         }
     }
@@ -127,12 +131,43 @@ struct Library {
         if (isEmpty()) {
             cout << "--- O Registro está vazio ---\n";
         }
-
+        
+        
         updateStatus();
+
+        int border_line = (2 + 7 + 3 + max_title_size + 3 + max_author_size + 3 + max_genre_size + 3 + max_age_size + 3 + max_quantity_size + 3 + max_id_size + 3);
+
+        for(int d = 0; d < border_line; d++) {cout << "-";}
+        cout << endl;
+
+        cout << "| Posicao";
+        //for(int c = 0; c < 7 - ; c++) {cout << " ";}
+
+        cout << " | " << "Titulo";
+        for(int c = 0; c < max_title_size - 6; c++) {cout << " ";}
+
+        cout << " | " << "Autor";
+        for(int c = 0; c < max_author_size - 5; c++) {cout << " ";}
+
+        cout << " | " << "Genero";
+        for(int c = 0; c < max_genre_size - 6; c++) {cout << " ";}
+
+        cout << " | " << "Ano";
+        for(int c = 0; c < max_age_size - 3; c++) {cout << " ";}
+
+        cout << " | " << "Quantidade";
+        for(int c = 0; c < max_quantity_size - 10; c++) {cout << " ";}
+
+        cout << " | " << "ID";
+        for(int c = 0; c < max_id_size - 2; c++) {cout << " ";}
+        cout << " |" << endl;
+
+        for(int d = 0; d < border_line; d++) {cout << "-";}
+        cout << endl;
         for (int i = 0; i < inventory.size(); i++) { 
 
-            cout << i;
-            for (int c = 0; c < 3 - to_string(i).size(); c++) {cout << " ";}
+            cout << "| " << i;
+            for (int c = 0; c < 7 - to_string(i).size(); c++) {cout << " ";}
 
             cout << " | " << inventory[i].title;
             for (int c = 0; c < max_title_size - inventory[i].title.size(); c++) {cout << " ";}
@@ -144,14 +179,18 @@ struct Library {
             for (int c = 0; c < max_genre_size - inventory[i].getGenre().size(); c++) {cout << " ";}
             
             cout << " | " << inventory[i].created_in;
-            for (int c = 0; c < book_age_size - to_string(inventory[i].created_in).size(); c++) {cout << " ";}
+            for (int c = 0; c < max_age_size - to_string(inventory[i].created_in).size(); c++) {cout << " ";}
 
             cout << " | " << inventory[i].quantity;
-            for (int c = 0; c < 3 - to_string(inventory[i].quantity).size(); c++) {cout << " ";}
+            for (int c = 0; c < max_quantity_size - to_string(inventory[i].quantity).size(); c++) {cout << " ";}
 
             cout << " | " << inventory[i].ID;
+            for (int c = 0; c < max_id_size - to_string(inventory[i].ID).size(); c++) {cout << " ";}
+
             cout << " |" << endl;
         }
+        for(int d = 0; d < border_line; d++) {cout << "-";}
+        cout << endl;
     }
     void printBook(VirtualBook &selected_book) {
         cout << "Título: " << selected_book.title << "\nAuthor: " << selected_book.author << "\nAno de lançamento: " << selected_book.created_in << endl;
