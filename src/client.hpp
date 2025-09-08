@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
-#include "util.hpp"
+#include "book_n_library.hpp"
 using namespace std;
 
 
@@ -108,7 +108,16 @@ class ClientManager {
         cout << endl;
     }
 
-    int searchID() {
+    void selectClientID(int ID) {
+        for(VirtualClient &c: clients) {
+            if(ID == c.id) {
+                selected_clients = &c;
+            }
+        }
+        cout << "Cliente não encontrado ou o Valor se encontra fora do Alcance" << "\n";
+    }
+    int searchClientID() {
+        showClients();
         while (true) 
         {
             int search_id = inputInt("Buscar um cliente por ID: ");
@@ -122,8 +131,28 @@ class ClientManager {
         }
     }
 
+    int searchClientName() {
+        while (true)
+        {
+            string searching_sequence = inputStr("Buscar Cliente por Nome: ");
+            for(int i = 0; i < clients.size(); i++) {
+                for(int s = 0; s < searching_sequence.size(); s++) {
+                    if(!clients[i].name[s] == searching_sequence[s]) {
+                        break;
+                    }
+                    if(!s < searching_sequence.size()) {
+                        selected_clients = &clients[i];
+                        return i;
+                    }
+                }
+            }
+            cout << "Cliente não encontrado\n";
+        }
+        
+    }
+
     void editClient() {
-        searchID();
+        searchClientID();
         string opc = inputOption({"Nome", "Gênero", "Data de Nascimento"});
         if (opc == "Nome") {selected_clients->name = inputStr("Novo Nome:");}
         if (opc == "Gênero") {selected_clients->gender = inputGender();}

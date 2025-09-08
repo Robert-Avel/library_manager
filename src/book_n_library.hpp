@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <ctime>
-#include "client.hpp"
+#include "util.hpp"
 using namespace std;
 
 
@@ -16,22 +16,6 @@ enum BookGenre {
     Poem,
     Science,
     None
-};
-
-
-struct HiredBook {
-    int book_id;
-    //Client tenant;
-    time_t date;
-    time_t expire_date;
-
-    void getDates() {
-        struct tm dt;
-        dt = *localtime(&date);
-        cout << "Data do aluguel: " << dt.tm_mday << " " << dt.tm_mon << " " << dt.tm_year << " " << dt.tm_hour << ":" << dt.tm_min << endl;
-        dt = *localtime(&expire_date);
-        cout << "Data de Expiração: " << dt.tm_mday << " " << dt.tm_mon << " " << dt.tm_year << " " << dt.tm_hour << ":" << dt.tm_min << endl;
-    }
 };
 
 
@@ -82,7 +66,7 @@ struct VirtualBook {
 
 // Library class to manage a collection of books
 
-struct Library {
+class Library {
     protected:
 
     int total_books = 0;
@@ -94,7 +78,7 @@ struct Library {
     int max_genre_size = 6;
     int max_age_size = 3;
 
-    VirtualBook* selected_book;
+
 
     void updateStatus() {
         total_books = 0;
@@ -111,9 +95,9 @@ struct Library {
 
     public:
 
-    vector<HiredBook> hired_service = {};
     vector<VirtualBook> inventory = {};
 
+    VirtualBook* selected_book;
 
     bool isEmpty() {
         if (inventory.empty()) {
@@ -195,7 +179,16 @@ struct Library {
     void printBook(VirtualBook &selected_book) {
         cout << "Título: " << selected_book.title << "\nAuthor: " << selected_book.author << "\nAno de lançamento: " << selected_book.created_in << endl;
     }
-    int searchID() {
+    void selectBookID(int ID) {
+        for(VirtualBook &b: inventory) {
+            if(ID == b.ID) {
+                selected_book = &b;
+            }
+        }
+        cout << "Livro não encontrado ou o Valor se encontra fora do Alcance" << "\n";
+    }
+    int searchBookID() {
+        showBooks();
         while (true) 
         {
             int search_id = inputInt("Buscar um Livro por ID: ");
@@ -208,6 +201,7 @@ struct Library {
             cout << "Livro não encontrado ou o Valor se encontra fora do Alcance" << "\n";
         }
     }
+
 
     void editBook() {
         if (isEmpty()) {return;}
