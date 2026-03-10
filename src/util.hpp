@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void listPrint(vector<string> options) {
+void listPrint(vector<string> &options) {
     for (int i = 0; i < options.size(); i++) {
         std::cout << "[ " << i << " ] - " << options[i] << std::endl;
     }
@@ -25,12 +25,21 @@ int inputInt(string input_text) {
 
 int inputRange(vector<string> options) {
     //Função de validação de input, aceitando valores que estão dentro do range do array dado. retorna o index
-    int user_in;
     listPrint(options);
+    int user_in;
     do {
         user_in = inputInt("Selecione a Opção: ");
     } while (0 > user_in or user_in >= options.size());
+    return user_in;
+}
 
+int inputRange(string input_text, int max_range, int min_range = 0) {
+    //Função de validação de input, aceitando valores que estão dentro do range do array dado. retorna o index
+    cout << input_text;
+    int user_in;
+    do {
+        user_in = inputInt("Selecione a Opção: ");
+    } while (min_range > user_in || user_in > max_range);
     return user_in;
 }
 
@@ -69,4 +78,11 @@ string inputStr(string txt) {
         } 
     }
     //cin.ignore(1000, '\n');
+}
+
+
+char inputGender() {
+    int input = inputRange({"M - Male", "F - Female"});
+    if (input == 0) {return 'M';}
+    else {return 'F';}
 }
